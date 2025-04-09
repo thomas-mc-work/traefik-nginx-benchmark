@@ -1,6 +1,32 @@
-version: "3.9"
-
 services:
+  traefik-v3.4:
+    image: "traefik:v3.4.0-rc1"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:8000"
+      - "--serverstransport.maxidleconnsperhost=100000"
+      - "--experimental.fastProxy"
+    ports:
+      - "8034:8000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  traefik-v3.3:
+    image: "traefik:v3.3.5"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:8000"
+      - "--serverstransport.maxidleconnsperhost=100000"
+      - "--experimental.fastProxy"
+    ports:
+      - "8033:8000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
   traefik-v3.0:
     image: "traefik:v3.0"
     command:
@@ -10,7 +36,7 @@ services:
       - "--entrypoints.web.address=:8000"
       - "--serverstransport.maxidleconnsperhost=100000"
     ports:
-      - "8000:8000"
+      - "8030:8000"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
@@ -20,10 +46,10 @@ services:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:8002"
+      - "--entrypoints.web.address=:8000"
       - "--serverstransport.maxidleconnsperhost=100000"
     ports:
-      - "8002:8002"
+      - "8029:8000"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
@@ -38,7 +64,7 @@ services:
   whoami-1:
     image: "containous/whoami"
     ports:
-      - "8003:80"
+      - "8080:80"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.go-benchmark.rule=Host(`benchmark.whoami`)"
